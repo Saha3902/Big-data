@@ -1,0 +1,25 @@
+{
+  "version": "3.8",
+  "services": {
+    "container1": {
+      "image": "alpine",
+      "command": ["sleep", "infinity"],
+      "networks": ["mynet"]
+    },
+    "container2": {
+      "image": "alpine",
+      "command": ["sleep", "infinity"],
+      "networks": ["mynet"]
+    },
+    "container3": {
+      "image": "alpine",
+      "command": ["sleep", "infinity"],
+      "networks": ["mynet"]
+    }
+  },
+  "networks": {
+    "mynet": {
+      "driver": "bridge"
+    }
+  }
+}

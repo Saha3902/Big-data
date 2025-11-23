@@ -1,0 +1,4 @@
+FROM alpine:latest
+WORKDIR /app
+COPY tp3Bigdata.pbix /app/
+CMD ["sleep", "infinity"]
