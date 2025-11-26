@@ -1,0 +1,289 @@
+PowerShell 7.5.4
+PS C:\Users\SERV> docker exec -it mon-cassandra cqlsh
+Error response from daemon: container 8746f69ac170bcc48ccef2d0d061c55eddffcce220857c1d86299a5347d8820a is not running
+PS C:\Users\SERV> docker exec -it mon-cassandra cqlsh
+
+Connection error: ('Unable to connect to any servers', {'127.0.0.1:9042': ConnectionRefusedError(111, "Tried connecting to [('127.0.0.1', 9042)]
+. Last error: Connection refused")})
+PS C:\Users\SERV> docker exec -it mon-cassandra cqlsh     
+Connected to Test Cluster at 127.0.0.1:9042
+[cqlsh 6.2.0 | Cassandra 5.0.6 | CQL spec 3.4.7 | Native protocol v5]
+Use HELP for help.
+cqlsh> CREATE KEYSPACE IF NOT EXISTS resto_NY
+   ... WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };
+cqlsh> USE resto_NY;
+cqlsh:resto_ny> CREATE TABLE IF NOT EXISTS Restaurant (
+            ...   id int,
+            ...   name text,
+            ...   borough text,
+            ...   buildingnum text,
+            ...   street text,
+            ...   zipcode int,
+            ...   phone text,
+            ...   cuisinetype text,
+            ...   PRIMARY KEY (id)
+            ... );
+cqlsh:resto_ny> CREATE INDEX IF NOT EXISTS fk_Restaurant_cuisine ON Restaurant (cuisinetype);
+cqlsh:resto_ny> CREATE TABLE IF NOT EXISTS Inspection (
+            ...   idrestaurant int,
+            ...   inspectiondate date,
+            ...   violationcode text,
+            ...   violationdescription text,
+            ...   criticalflag text,
+            ...   score int,
+            ...   grade text,
+            ...   PRIMARY KEY (idrestaurant, inspectiondate)
+            ... );
+cqlsh:resto_ny> CREATE INDEX IF NOT EXISTS fk_Inspection_Restaurant ON Inspection (grade);
+cqlsh:resto_ny> unzip restaurants.zip -d /path/to/extracted
+            ...
+            ... docker cp "C:\Users\SERV\Desktop\BIG DATA MALLOL\restaurantsdocker\restaurants.csv" mon-cassandra:/
+            ... docker cp "C:\Users\SERV\Desktop\BIG DATA MALLOL\restaurantsdocker\restaurants_inspections.csv" mon-cassandra:/
+            ...
+            ...
+cqlsh:resto_ny> docker cp "C:\Users\SERV\Desktop\BIG DATA MALLOL\restaurantsdocker\restaurants_inspections.csv" mon-cassandra:/
+            ...
+            ...
+cqlsh:resto_ny> docker cp "C:\Users\SERV\Desktop\BIG DATA MALLOL\restaurantsdocker\restaurants.csv" mon-cassandra:/
+            ...
+cqlsh:resto_ny> docker exec -it mon-cassandra ls /
+            ...
+cqlsh:resto_ny>
+cqlsh:resto_ny>
+cqlsh:resto_ny>
+PS C:\Users\SERV> SELECT count(*) FROM Restaurant;
+*: The term '*' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+PS C:\Users\SERV> docker cp "C:\Users\SERV\Desktop\BIG DATA MALLOL\restaurantsdocker\restaurants_inspections.csv" mon-cassandra:/
+CreateFile C:\Users\SERV\Desktop\BIG DATA MALLOL\restaurantsdocker: The system cannot find the file specified.
+PS C:\Users\SERV> docker cp "C:\Users\SERV\Desktop\BIG DATA MALLOL\restaurantsdocker\restaurants.csv" mon-cassandra:/
+CreateFile C:\Users\SERV\Desktop\BIG DATA MALLOL\restaurantsdocker: The system cannot find the file specified.
+PS C:\Users\SERV> docker cp "C:\Users\SERV\Desktop\BIG DATA MALLOL\restaurants\restaurants.csv" mon-cassandra:/
+PS C:\Users\SERV> docker cp "C:\Users\SERV\Desktop\BIG DATA MALLOL\restaurants\restaurants_inspections.csv" mon-cassandra:/
+Successfully copied 82.5MB to mon-cassandra:/
+PS C:\Users\SERV> docker cp "C:\Users\SERV\Desktop\BIG DATA MALLOL\restaurants\restaurants_inspections.csv" mon-cassandra:/
+Successfully copied 69MB to mon-cassandra:/
+PS C:\Users\SERV> SELECT count(*) FROM Restaurant;
+*: The term '*' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+PS C:\Users\SERV> SELECT count(*) FROM Restaurant;
+*: The term '*' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
+PS C:\Users\SERV> docker cp "C:\Users\SERV\Desktop\BIG DATA MALLOL\restaurantsdocker\restaurants.csv" mon-cassandra:/
+CreateFile C:\Users\SERV\Desktop\BIG DATA MALLOL\restaurantsdocker: The system cannot find the file specified.
+PS C:\Users\SERV> docker exec -it mon-cassandra cqlsh
+Connected to Test Cluster at 127.0.0.1:9042
+[cqlsh 6.2.0 | Cassandra 5.0.6 | CQL spec 3.4.7 | Native protocol v5]
+Use HELP for help.
+cqlsh> docker exec -it mon-cassandra ls -l /*.csv
+   ... docker exec -it mon-cassandra ls -l /*.csvChinese Restaurant | 7183677977 |        GRAND CONCOURSE |   10468
+ 41389072 |      BROOKLYN |        1655 |                                                        Caribbean |
+BALBOA RESTAURANT. | 7184673765 |         BEDFORD AVENUE |   11225
+
+---MORE---SELECT count(*) FROM Inspection WHERE score > 30 ALLOW FILTERING;
+ id       | borough       | buildingnum | cuisinetype                                                      | name
+          | phone      | street                  | zipcode
+----------+---------------+-------------+------------------------------------------------------------------+-----------------------------
+----------+------------+-------------------------+---------
+ 41580444 |     MANHATTAN |         297 |                                   Sandwiches/Salads/Mixed Buffet |
+   SUBWAY | 2122190579 |           CHURCH STREET |   10013
+ 41414572 |     MANHATTAN |         591 |                                                          Mexican |                         REFR
+IED BEANS | 2125682299 |  FORT WASHINGTON AVENUE |   10033
+ 40849849 |     MANHATTAN |         177 |                                                            Pizza |            FAMOUS BEN'S PIZZ
+A OF SOHO | 2129664494 |           SPRING STREET |   10012
+ 41297095 |      BROOKLYN |        2274 |                                                         Japanese |
+ CHIKURIN | 7183330811 |               86 STREET |   11214
+ 41474909 |     MANHATTAN |        1484 |                                                          Mexican |                   MI CASITA 
+RESTARANT | 2122343331 |        AMSTERDAM AVENUE |   10031
+ 40378874 |     MANHATTAN |         149 |                                                         American |                           TE
+RRA BLUES | 2127777776 |          BLEEKER STREET |   10012
+ 41276395 |         BRONX |         232 |                                                            Pizza |                           SA
+M'S PIZZA | 7185489070 |        WEST  231 STREET |   10463
+ 50037369 |     MANHATTAN |         240 |                                                 CafÃ©/Coffee/Tea |
+STARBUCKS | 3476370214 |           MANHATTAN AVE |   10026
+ 41176172 |     MANHATTAN |         665 |                                                          Italian |                    GENNARO R
+ESTAURANT | 2126655348 |        AMSTERDAM AVENUE |   10025
+ 41659920 |     MANHATTAN |         510 |                                                           Bakery |                      SAY IT 
+WITH CAKE | 2128649500 |        WEST  123 STREET |   10027
+ 41703749 |      BROOKLYN |         341 |                                                 CafÃ©/Coffee/Tea |
+   GATHER | 7187682439 |                7 AVENUE |   11215
+ 50047265 |     MANHATTAN |         854 |                                                          Chinese |
+      HAN | 2127078111 |                10TH AVE |   10019
+ 40369669 |         BRONX |        2701 |                                                       Hamburgers |                          WHI
+TE CASTLE | 7182314978 |        BOSTON POST ROAD |   10467
+ 50045782 |     MANHATTAN |        2705 |                                                          Chinese |            OLLIE'S CHINESE R
+ESTAURANT | 2129323300 |                BROADWAY |   10025
+ 41293746 |     MANHATTAN |          23 |                                                         American |                    GRAMERCY 
+STAR CAFE | 2125053663 |        LEXINGTON AVENUE |   10010
+ 40988528 |      BROOKLYN |        5023 |                                                    Pizza/Italian |         LA STRADA PIZZERIA R
+ESTAURANT | 7186868057 |               10 AVENUE |   11219
+ 50055434 |      BROOKLYN |         447 |                                                         American |                            F
+ORK SLOPE | 7187303199 |                 7TH AVE |   11215
+ 50016826 |        QUEENS |        4012 |                                                          Spanish |               JUQUILA MEXICA
+N CUISINE | 7184500104 |                 83RD ST |   11373
+ 41145163 |        QUEENS |        4107 |                                    Vietnamese/Cambodian/Malaysia |                   PHO BANG R
+ESTAURANT | 7189395520 |       KISSENA BOULEVARD |   11355
+ 50052618 |     MANHATTAN |          27 |                                                            Other |  FOUR SEASONS HOTEL NEW YORK
+ DOWNTOWN | 6468801999 |              BARCLAY ST |   10007
+ 50000606 |      BROOKLYN |         521 |                                                         American |
+ VEKSLERS | 7185345498 |            HICKS STREET |   11231
+ 41353366 |        QUEENS |        2102 |                                                          Italian |            VESTA TRATTORIA &
+ WINE BAR | 7185455550 |               30 AVENUE |   11102
+ 41646919 |        QUEENS |        8312 | Latin (Cuban, Dominican, Puerto Rican, South & Central American) |                   LA PERRADA
+ DE CHALO | 7189152130 |      NORTHERN BOULEVARD |   11372
+ 50004262 |         BRONX |        2280 |                                                          Chicken |       HALAL HUT FRIED CHICKE
+N & PIZZA | 7182957867 |            BATHGATE AVE |   10457
+ 50038938 |      BROOKLYN |        6014 |                                                          Mexican |
+BUKANITAS | 3472239827 |         NEW UTRECHT AVE |   11219
+ 41647941 | STATEN ISLAND |          27 |                                                    Pizza/Italian |                     FRATELLI
+ PIZZERIA | 7183568742 |          SEGUINE AVENUE |   10309
+ 41712236 |        QUEENS |        5514 |                                                 CafÃ©/Coffee/Tea |   D & R HEALTH & NUTRITION/ 
+HERBALIFE | 3476177185 |        ROOSEVELT AVENUE |   11377
+ 41290351 |     MANHATTAN |         480 |                                                         American |
+    JOE'S | 6469186510 |        AMSTERDAM AVENUE |   10024
+ 41677644 |      BROOKLYN |        2379 |                                                 CafÃ©/Coffee/Tea |                     AUDREY'S
+ CONCERTO | 7182662829 |               86 STREET |   11214
+ 50018759 |      BROOKLYN |          50 |                                                          Spanish |                 PUNTA CANA R
+ESTAURANT | 7182301703 |                 5TH AVE |   11217
+ 50040815 |        QUEENS |        3526 |                                                           Korean |
+JOOMAKGOL | 7184600042 |           FARRINGTON ST |   11354
+ 50047854 |        QUEENS |         550 |                                                         Japanese |
+  TAKUMEN | 7183617973 |                50TH AVE |   11101
+ 41666677 |     MANHATTAN |          89 |                                                          Tex-Mex |                            G
+UACO TACO | 6313279338 |        EAST    2 STREET |   10009
+ 50033014 |     MANHATTAN |         159 |                                                         American |                    CROMPTON 
+ALE HOUSE | 9143741355 |               W 26TH ST |   10001
+ 50016937 |        QUEENS |       10502 |                                                         American |                           BU
+RGER KING | 7188481573 |           ROCKAWAY BLVD |   11417
+ 50049315 |      BROOKLYN |        6317 |                                   Juice, Smoothies, Fruit Salads |
+    TBAAR | 9172135932 |                 8TH AVE |   11220
+ 50045350 |      BROOKLYN |         710 |                                                          Italian |                     NOSTRO R
+ISTORANTE | 9293377053 |                 5TH AVE |   11215
+ 41541736 |     MANHATTAN |          40 |                                                         American |
+ASIA ROMA | 9177238102 |         MULBERRY STREET |   10013
+ 50039779 |         BRONX |          12 |                                                     Delicatessen |     LITTLE MICHAEL'S DELI & 
+SALAD BAR | 7182317040 |           E GUN HILL RD |   10467
+ 41456879 |     MANHATTAN |        1827 |                                                            Pizza |                           RA
+Y'S PIZZA | 2123483955 |                2 AVENUE |   10128
+ 41459947 |         BRONX |         114 |                                                         American |                        DUNKI
+N' DONUTS | 7187424839 |      BRUCKNER BOULEVARD |   10454
+ 40380164 |         BRONX |         158 |                                                          Spanish |                           CU
+CHIFRITOS | 7183674500 |            E. 188 TH ST |   10468
+ 41631538 |     MANHATTAN |         189 |                                                 CafÃ©/Coffee/Tea |                         VIVE
+ LA CREPE | 2129330486 |         COLUMBUS AVENUE |   10023
+ 41054662 |     MANHATTAN |          90 |                                                 CafÃ©/Coffee/Tea |
+STARBUCKS | 2126615489 |             PARK AVENUE |   10016
+ 41662783 |      BROOKLYN |        2933 |                                                          Spanish |
+EL TIPICO | 7182772560 |           FULTON STREET |   11207
+ 50001915 |     MANHATTAN |          63 |                                                         American |                      REFINER
+Y ROOFTOP | 6466640310 |        WEST 38TH STREET |   10018
+ 41235974 |     MANHATTAN |        3869 |                                                       Hamburgers |                      JIMBOS 
+HAMBURGER | 2129421642 |               10 AVENUE |   10034
+ 50007831 |         BRONX |          20 |                                                          Spanish |            JUNIOR' SEAFOOD R
+ESTAURANT | 7185836565 |          W BURNSIDE AVE |   10453
+ 41527419 |        QUEENS |       25018 |                                                       Vegetarian |                 SURYA SWEETS
+ & SNACKS | 7183477770 |         HILLSIDE AVENUE |   11426
+ 50009808 |      BROOKLYN |         282 |                                                          Spanish |                      PIO PIO
+ BROOKLYN | 7186273744 |               KINGS HWY |   11223
+ 50001810 |     MANHATTAN |        2014 |                                                          Chinese |                     GRACE WO
+K CHINESE | 2128312588 |              2ND AVENUE |   10029
+ 50001318 |     MANHATTAN |         185 | Latin (Cuban, Dominican, Puerto Rican, South & Central American) |
+  KOLMARO | 2129420136 |          SHERMAN AVENUE |   10034
+ 41637438 |      BROOKLYN |        4807 |                                                         American |            BOAT HOUSE & CAJU
+N CUISINE | 7186335880 |                8 AVENUE |   11220
+ 41664735 |        QUEENS |        3564 |                                                          Spanish |                  EMILY BAR R
+ESTAURANT | 7182056737 |                 95TH ST |   11372
+ 50006377 |        QUEENS |        3215 |                                                          Spanish |                  LOS TAQUITO
+S DEL TIO | 7185051583 |           JUNCTION BLVD |   11369
+ 41631242 |        QUEENS |        5918 |                                                            Irish |                         TORI
+ O'TOOLES | 7183596137 |            KISSENA BLVD |   11355
+ 50045987 |     MANHATTAN |        2647 | Latin (Cuban, Dominican, Puerto Rican, South & Central American) |            CARI WINE BAR & R
+ESTAURANT | 6468693927 | FREDERICK DOUGLASS BLVD |   10030
+ 50035660 |     MANHATTAN |         162 |                                                            Pizza |
+   ROCCOS | 2126339555 |                 7TH AVE |   10011
+ 41718746 |     MANHATTAN |         102 |                                                         American |
+    FEAST | 2125298880 |                3 AVENUE |   10003
+ 41517331 |     MANHATTAN |         316 |                                                       Hamburgers |    FIVE GUYS FAMOUS BURGERS 
+AND FRIES | 2125646115 |        WEST   34 STREET |   10001
+ 41661329 |     MANHATTAN |         150 |                                                          Mexican |                   SINIGUAL R
+ESTAURANT | 2122860250 |        East 42nd Street |   10017
+ 41313568 |     MANHATTAN |         370 |                                                           Donuts |                        DUNKI
+N' DONUTS | 2126824210 |        LEXINGTON AVENUE |   10168
+ 40634713 |     MANHATTAN |          33 |                                                         American |     NEW YORK UNIVERSITY - LI
+PTON HALL | 2129953074 |  WASHINGTON SQUARE WEST |   10011
+ 50011004 |         BRONX |        1473 |                                                          African |              BRAVO AFRICAN R
+ESTAURANT | 3472190481 |         WESTCHESTER AVE |   10472
+ 41380708 |         BRONX |         557 |                                                       Hamburgers |                           BU
+RGER KING | 7187086651 |         GRAND CONCOURSE |   10451
+ 50054734 |         BRONX |        8486 |                                                          Chinese |        CITY ISLAND CHINESE R
+ESTAURANT | 7188853775 |         CITY ISLAND AVE |   10464
+ 40397189 |     MANHATTAN |          51 |                                                  Bagels/Pretzels |                           BA
+GEL BOB'S | 2125332627 |        UNIVERSITY PLACE |   10003
+ 41171587 |        QUEENS |        2109 |                                                       Sandwiches |
+   SUBWAY | 7187268868 |                BROADWAY |   11106
+ 41330566 | STATEN ISLAND |         145 |                                                         American |             CARLYLE GREEN  P
+OOL STAND | 7189489487 |      CARLYLE GREEN POOL |   10312
+ 50002954 |     MANHATTAN |         184 |                                                         American |                  EDDIE'S DEL
+I & PIZZA | 9176393578 |              E 116TH ST |   10029
+ 50035487 |        QUEENS |       21505 |                                                           Korean |                SAE MIN SOK R
+ESTAURANT | 7182813177 |           NORTHERN BLVD |   11361
+ 41647899 |      BROOKLYN |          80 |                                                         American |
+ REYNARDS | 7184608000 |            WYTHE AVENUE |   11249
+ 41259890 |     MANHATTAN |         101 |                                                         American |                      SPITZER
+'S CORNER | 2122280027 |        RIVINGTON STREET |   10002
+ 41562680 |        QUEENS |       16525 |                                                         American |                        DUNKI
+N' DONUTS | 7187392284 |          LIBERTY AVENUE |   11433
+ 41311174 |         BRONX |         912 |                                                         American |              JIMBO'S HAMBURG
+ER PALACE | 7183283208 |           SOUNDVIEW AVE |   10473
+ 41708251 |      BROOKLYN |        4120 |                                                            Asian |         ASEA FUSION & YAKITO
+RI LOUNGE | 3478895252 |                8 AVENUE |   11232
+ 41302781 |     MANHATTAN |          36 |                                                          Italian |                   TRATTORIA 
+IL MULINO | 2127778448 |        EAST   20 STREET |   10003
+ 50054615 |      BROOKLYN |         220 |                                                            Other |                  COBBLESTONE
+ CATERING | 7182221491 |            ATLANTIC AVE |   11201
+ 50035652 |     MANHATTAN |         472 |                                                             Thai |                           TH
+AI SELECT | 2126959920 |                 9TH AVE |   10018
+ 41242241 |     MANHATTAN |         601 |                                                        Caribbean | GOLDEN KRUST CARIBBEAN BAKER
+Y & GRILL | 2129677666 |                8 AVENUE |   10018
+ 40391121 |     MANHATTAN |         221 |                                                            Pizza |                   LAZZARAS P
+IZZA CAFE | 2129447792 |        WEST   38 STREET |   10018
+ 40399986 |      BROOKLYN |         432 |                                                         American |                 FIFTH AVE CA
+FE /DINER | 7188328131 |                5 AVENUE |   11215
+ 40916179 |        QUEENS |       21854 |                                                           Creole |                  BELVEDERE R
+ESTAURANT | 7184649795 |        HEMPSTEAD AVENUE |   11429
+ 50034948 |      BROOKLYN |         530 |                                                       Sandwiches |
+   SUBWAY | 7182350937 |            CONDUIT BLVD |   11208
+ 50054637 |     MANHATTAN |        1886 |                                                         American |                           BU
+RGER KING | 9089270130 |                 3RD AVE |   10029
+ 40928775 |     MANHATTAN |         130 |                                                      Continental |
+ CAPITALE | 2123345500 |                  BOWERY |   10013
+ 50042747 |        QUEENS |       13693 |                                                          Chinese |                   LANZHOU BE
+EF NOODLE | 7183592188 |                37TH AVE |   11354
+ 41659848 |        QUEENS |        3779 | Latin (Cuban, Dominican, Puerto Rican, South & Central American) |                    LA BRISA 
+DEL CIBAO | 7182054941 |              103 STREET |   11368
+ 41361120 |      BROOKLYN |        2822 |                                                            Pizza |                SOFIA PIZZA R
+ESTAURANT | 7185136300 |     CONEY ISLAND AVENUE |   11235
+ 50004076 |        QUEENS |        4612 | Latin (Cuban, Dominican, Puerto Rican, South & Central American) |                  EL POTRERO 
+SPORT BAR | 6465228877 |          GREENPOINT AVE |   11104
+ 41611654 |        QUEENS |       11000 |                                                         American |                         SERV
+ICE BAR-4 | 6465881074 |      ROCKAWAY BOULEVARD |   11420
+ 40687209 |     MANHATTAN |          25 |                                                          Italian |                         VIA 
+QUADRONNO | 2126509880 |        EAST   73 STREET |   10021
+ 50049879 |     MANHATTAN |         353 |                                                            Other |
+MO GELATO | 2122666758 |               W 14TH ST |   10014
+ 41504787 |     MANHATTAN |         265 |                                                          Chinese |                          NO.
+1 KITCHEN | 2125290539 |                1 AVENUE |   10003
+ 41382542 |        QUEENS |        7715 |                                                          Chinese |                    NEW PEKIN
+G KITCHEN | 7184269789 |               37 AVENUE |   11372
+ 50005201 |      BROOKLYN |         357 |                                                          Chinese |     HONG KONG CAFE CHINESE R
+ESTAURANT | 7187833838 |            FRANKLIN AVE |   11238
+ 50012564 |      BROOKLYN |        3408 |                                                          Chinese |                          PEK
+ING HOUSE | 7188275016 |               FULTON ST |   11208
+ 40799123 |     MANHATTAN |         230 |                                                 CafÃ©/Coffee/Tea |
+STARBUCKS | 2126819407 |             PARK AVENUE |   10017
+ 50041581 |      BROOKLYN |         309 |                                                 CafÃ©/Coffee/Tea |                       D'AMIC
+OS COFFEE | 7188755403 |                COURT ST |   11231
+ 50017064 |      BROOKLYN |        4619 |                                                          Chinese |                 XING XIANG R
+ESTAURANT | 7188538883 |                 8TH AVE |   11220
+
+---MORE---USE resto_NY;
